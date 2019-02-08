@@ -53,6 +53,7 @@ not_specified_brand <- brand_prob_all %>%
 brand_by_all_token <- gather(not_specified_brand, "mobile_type", "prob", 3:dim(brand_prob_all)[2]) %>% arrange(id, word) %>% filter(prob > all_token_prob_precision) %>% group_by(id) %>% top_n(n = 1) %>% slice(1)
 
 
-brand_result <- rbind(brand_by_title, brand_by_all_token)
+brand_result <- rbind(brand_by_title, brand_by_all_token) %>% arrange(id)
 
-View(brand_result)
+ids <- 1:1000
+unknown_ids <- ids[!(ids %in% brand_result$id)]
