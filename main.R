@@ -5,7 +5,8 @@ library(RecordLinkage)
 library(stringdist)
 library(tidyr)
 
-
+title_prob_precision <- 0.8
+all_token_prob_precision <- 0.5
 
 setwd("~/Documents/datadays/")
 td = read.csv("Data/sample_mobile_data_1000.csv", stringsAsFactors = F)
@@ -19,20 +20,39 @@ all_token <- rbind(title_token, desc_token) %>% arrange(id)
 
 
 
-brand <- c("iphone", "samsung", "huawei", "nokia" ,"lenovo", "sony", "lg", "htc" ,"xiaomi", "alcatel", "galaxy", "motorola", "apple", "nexus", "نوکیا", "آیفون", "سامسونگ", "هواوی","ال جی", "سونی", "لنوو","اچ تی سی","شیائومی","الکاتل", "گلکسی", "موتورولا", "اپل")
-model <- c("note2","note3","note4","note5","note6","note7","note8","نوت","j1","j2","j3","j4","j5","جی۱","جی۲","جی۳","جی۴","جی۵","s3","s4","s5","s6","s7","s8","s9","اس۳","اس۴","اس۵","اس۶","اس۷","اس۸","اس۹")
+brand <- c("iphone", "samsung", "huawei", "nokia" ,"lenovo", "sony", "lg", "htc" ,"xiaomi", "alcatel", "galaxy", "motorola", "apple", "nexus", "نوکیا", "آیفون", "سامسونگ", "هواوی","ال‌جی", "سونی", "لنوو","اچ تی سی","شیائومی","الکاتل", "گلکسی", "موتورولا", "اپل")
+model <- c("note2","note3","note4","note5","note6","note7","note8","۲نوت۸","نوت۷","نوت۶","نوت۵","نوت۴","نوت۳","نوت۹","نوت","j1","j2","j3","j4","j5","j6","j7","جی۱","جی۲","جی۳","جی۴","جی۵","جی۶","جی۷","s3","s4","s5","s6","s7","s8","s9","اس۳","اس۴","اس۵","اس۶","اس۷","اس۸","اس۹","z1","z10","lumia","a5","a6","a7","honor","nexus5", "nexus5x", "nexus6p", "nexus4", "nexus7", "نکسوس۵","نکسوس۵ایکس","نکسوس۴","نکسوس۷", "zte","caterpillar","کاترپیلار","desire","دیزایر","زیمنس","siemens","هانر","g610","g620","g630")
 mobile_type <- c(brand, model)
 
-dis_brand <- sapply(mobile_type, function(x) {
+dis_brand_title <- sapply(mobile_type, function(x) {
+  y <- levenshteinSim(title_token$word, x)
+  y
+})
+
+dis_brand_all <- sapply(mobile_type, function(x) {
   y <- levenshteinSim(all_token$word, x)
   y
 })
 
-dis_brand <- data.frame(dis_brand)
+dis_brand_title <- data.frame(dis_brand_title)
+dis_brand_all <- data.frame(dis_brand_all)
 
-uu <- cbind(all_token, dis_brand)
+brand_prob_title <- cbind(title_token, dis_brand_title)
+brand_prob_all <- cbind(all_token, dis_brand_all)
 
 
-gather(uu, "mobile_type", "prob", 3:dim(uu)[2]) %>% arrange(id, word) %>% filter(prob > 0.5) %>% group_by(id) %>% top_n(n = 1) %>% slice(1) %>% View()
+brand_by_title <- gather(brand_prob_title, "mobile_type", "prob", 3:dim(brand_prob_title)[2]) %>% arrange(id, word) %>% filter(prob > title_prob_precision) %>% group_by(id) %>% top_n(n = 1) %>% slice(1)
 
 
+index_of_titles <- brand_by_title %>%
+  select(id)
+
+not_specified_brand <- brand_prob_all %>% 
+  filter(!(id %in% index_of_titles$id))
+
+brand_by_all_token <- gather(not_specified_brand, "mobile_type", "prob", 3:dim(brand_prob_all)[2]) %>% arrange(id, word) %>% filter(prob > all_token_prob_precision) %>% group_by(id) %>% top_n(n = 1) %>% slice(1)
+
+
+brand_result <- rbind(brand_by_title, brand_by_all_token)
+
+View(brand_result)
