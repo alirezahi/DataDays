@@ -2,7 +2,6 @@
 library(dplyr)
 library(tidytext)
 library(RecordLinkage)
-library(stringdist)
 library(tidyr)
 
 title_prob_precision <- 0.8
@@ -57,3 +56,21 @@ brand_result <- rbind(brand_by_title, brand_by_all_token) %>% arrange(id)
 
 ids <- 1:1000
 unknown_ids <- ids[!(ids %in% brand_result$id)]
+
+others_token <- all_token %>% filter(id %in% unknown_ids)
+dis_brand_others <- sapply(mobile_type, function(x) {
+  y <- agrepl(x, others_token$word, max.distance = 0.5, ignore.case = T)
+  z <- levenshteinSim(others_token$word, x)
+  y * z
+})
+
+
+dis_brand_others <- data.frame(dis_brand_others)
+
+brand_prob_others <- cbind(others_token, dis_brand_others)
+
+
+brand_by_others <- gather(brand_prob_others, "mobile_type", "prob", 3:dim(brand_prob_others)[2]) %>% arrange(id, word) %>% group_by(id) %>% top_n(n = 1) %>% slice(1)
+
+
+
