@@ -9,7 +9,7 @@ library(stringr)
 rm(list=ls())
 
 setwd("~/Documents/datadays/")
-td <- read.csv("Data/divar_posts_dataset.csv", stringsAsFactors = F, nrows = 1000)
+td <- read.csv("Data/divar_posts_dataset.csv", stringsAsFactors = F)
 
 pc <- td %>% filter(cat1 == "electronic-devices" & cat2 == "computers" & cat3 == "desktops")
 saz <- td %>% filter(cat1 == "leisure-hobbies" & cat2 == "musical-instruments" & cat3 == "traditional")
