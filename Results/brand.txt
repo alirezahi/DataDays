@@ -4,7 +4,7 @@ samsung
 nokia
 samsung
 samsung
-apple
+samsung
 samsung
 huawei
 apple
@@ -15,7 +15,7 @@ huawei
 sony
 samsung
 lg
-apple
+samsung
 samsung
 apple
 apple
@@ -188,7 +188,7 @@ apple
 huawei
 apple
 apple
-sony
+samsung
 apple
 samsung
 samsung
@@ -294,7 +294,7 @@ samsung
 huawei
 apple
 sony
-apple
+samsung
 samsung
 nokia
 huawei
@@ -537,7 +537,7 @@ samsung
 samsung
 apple
 samsung
-huawei
+samsung
 apple
 htc
 huawei
@@ -672,7 +672,7 @@ apple
 huawei
 apple
 apple
-sony
+samsung
 apple
 samsung
 samsung
@@ -726,7 +726,7 @@ apple
 apple
 nokia
 nokia
-lg
+samsung
 samsung
 sony
 sony
@@ -783,7 +783,7 @@ siemens
 apple
 sony
 apple
-apple
+samsung
 apple
 nokia
 samsung
@@ -880,7 +880,7 @@ sony
 nokia
 huawei
 apple
-sony
+samsung
 samsung
 samsung
 huawei
@@ -908,7 +908,7 @@ samsung
 sony
 sony
 apple
-samsung
+blackberry
 samsung
 samsung
 nokia
@@ -920,7 +920,7 @@ samsung
 apple
 samsung
 samsung
-apple
+samsung
 apple
 apple
 huawei
@@ -979,7 +979,7 @@ apple
 lg
 nokia
 samsung
-lg
+samsung
 samsung
 apple
 samsung
