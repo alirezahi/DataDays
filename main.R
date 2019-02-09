@@ -5,14 +5,18 @@ library(RecordLinkage)
 library(stringdist)
 library(tidyr)
 library(plyr)
+library(stringr)
+
+rm(list=ls())
 
 title_prob_precision <- 0.8
 all_token_prob_precision <- 0.5
 
-
 setwd("~/Documents/datadays/")
 td = read.csv("Data/sample_mobile_data_1000.csv", stringsAsFactors = F)
 td$id = 1:nrow(td)
+td$desc = chartr(old = "۱۲۳۴۵۶۷۸۹۰", new = "1234567890",td$desc)
+td$title = chartr(old = "۱۲۳۴۵۶۷۸۹۰", new = "1234567890",td$title)
 
 
 
@@ -63,7 +67,7 @@ unknown_ids <- ids[!(ids %in% brand_result$id)]
 
 title_substr <- td %>% filter(id %in% unknown_ids)
 
-substr_brand <- sapply(mobile_type, function(x) {
+substr_brand <- sapply(model, function(x) {
   y <- grepl(x, title_substr$title)
   y
 })
@@ -76,7 +80,7 @@ unknown_ids <- ids[!(ids %in% c(brand_result$id,brand_prob_title_substr$id))]
 
 desc_substr <- td %>% filter(id %in% unknown_ids)
 
-substr_brand <- sapply(mobile_type, function(x) {
+substr_brand <- sapply(model, function(x) {
   y <- grepl(x, desc_substr$desc)
   y
 })
