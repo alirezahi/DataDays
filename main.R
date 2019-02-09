@@ -15,8 +15,8 @@ all_token_prob_precision <- 0.5
 setwd("~/Documents/datadays/")
 td = read.csv("Data/sample_mobile_data_1000.csv", stringsAsFactors = F)
 td$id = 1:nrow(td)
-td$desc = chartr(old = "۱۲۳۴۵۶۷۸۹۰", new = "1234567890",td$desc)
-td$title = chartr(old = "۱۲۳۴۵۶۷۸۹۰", new = "1234567890",td$title)
+td$desc = chartr(old = "۱۲۳۴۵۶۷۸۹۰١٢٣٤٥٦٧٨٩٠", new = "12345678901234567890",td$desc)
+td$title = chartr(old = "۱۲۳۴۵۶۷۸۹۰١٢٣٤٥٦٧٨٩٠", new = "12345678901234567890",td$title)
 
 
 
@@ -25,7 +25,7 @@ title_token <- td %>% select(id, title) %>% unnest_tokens(word, title)
 all_token <- rbind(title_token, desc_token) %>% arrange(id)
 
 
-model <- c("iphone", "samsung", "huawei", "nokia" ,"lenovo", "sony", "lg", "htc" ,"xiaomi", "alcatel", "galaxy", "motorola", "apple", "نوکیا", "آیفون", "سامسونگ", "هواوی","ال جی", "سونی", "لنوو","اچ تی سی","شیائومی","الکاتل", "گلکسی", "موتورولا", "اپل", "note2","note3","note4","note5","note6","note7","note8","۲نوت۸","نوت۷","نوت۶","نوت۵","نوت۴","نوت۳","نوت۹","نوت","j1","j2","j3","j4","j5","j6","j7","جی۱","جی۲","جی۳","جی۴","جی۵","جی۶","جی۷","s3","s4","s5","s6","s7","s8","s9","اس۳","اس۴","اس۵","اس۶","اس۷","اس۸","اس۹","z1","z10","lumia","a5","a6","a7","honor","nexus5", "nexus5x", "nexus6p", "nexus4", "nexus7", "نکسوس۵","نکسوس۵ایکس","نکسوس۴","نکسوس۷", "zte","caterpillar","کاترپیلار","desire","دیزایر","زیمنس","siemens","هانر","g610","g620","g630")
+model <- c("iphone", "samsung", "huawei", "nokia" ,"lenovo", "sony", "lg", "htc" ,"xiaomi", "alcatel", "galaxy", "motorola", "apple", "نوکیا", "آیفون", "سامسونگ", "هواوی","ال جی", "سونی", "لنوو","اچ تی سی","شیائومی","الکاتل", "گلکسی", "موتورولا", "اپل", "note2","note3","note4","note5","note6","note7","note8","نوت2","نوت7","نوت6","نوت5","نوت4","نوت3","نوت9","نوت8","j1","j2","j3","j4","j5","j6","j7","جی1","جی2","جی3","جی4","جی5","جی6","جی7","s3","s4","s5","s6","s7","s8","s9","اس3","اس4","اس5","اس6","اس7","اس8","اس9","z1","z10","lumia","a5","a6","a7","honor","nexus5", "nexus5x", "nexus6p", "nexus4", "nexus7", "نکسوس5","نکسوس5 ایکس","نکسوس4","نکسوس7", "zte","caterpillar","کاترپیلار","desire","دیزایر","زیمنس","siemens","هانر","g610","g620","g630")
 brand <- c("apple", "samsung", "huawei", "nokia", "lenovo", "sony", "lg", "htc", "xiaomi", "alcatel", "samsung", "motorola", "apple", "nokia", "apple", "samsung", "huawei", "lg", "sony", "lenovo", "htc", "xiaomi", "alcatel", "samsung", "motorola","apple", "samsung", "samsung", "samsung", "samsung", "samsung", "samsung", "samsung", "samsung", "samsung", "samsung", "samsung", "samsung", "samsung", "samsung", "samsung", "samsung", "samsung", "samsung", "samsung", "samsung", "samsung", "samsung", "samsung", "samsung", "samsung", "samsung", "samsung", "samsung", "samsung", "samsung", "samsung", "samsung", "samsung", "samsung", "samsung", "samsung", "samsung", "samsung", "samsung", "samsung", "samsung", "samsung", "samsung", "sony", "blackberry", "nokia", "samsung", "samsung", "samsung", "huawei", "lg", "lg", "huawei", "lg", "asus", "lg", "lg", "lg", "asus", "zte", "caterpillar", "caterpillar", "htc", "htc", "siemens", "siemens", "huawei", "huawei", "huawei", "huawei")
 
 model_replace <- c(model,c('اچ.تی.سی','ال.جی'))
