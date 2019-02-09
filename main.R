@@ -55,7 +55,7 @@ brand_result <- rbind(brand_by_title, brand_by_all_token) %>% arrange(id)
 
 brand_result$brand <- mapvalues(brand_result$model, from = model, to = brand)
 
-write.table(brand_result$brand, "Results/brand.txt", row.names=F, sep="\n", quote = F)
+
 
 ids <- 1:1000
 unknown_ids <- ids[!(ids %in% brand_result$id)]
@@ -74,4 +74,11 @@ brand_prob_others <- cbind(others_token, dis_brand_others)
 
 
 brand_by_others <- gather(brand_prob_others, "model", "prob", 3:dim(brand_prob_others)[2]) %>% arrange(id, word) %>% group_by(id) %>% top_n(n = 1) %>% slice(1)
+
+brand_by_others$brand <- mapvalues(brand_by_others$model, from = model, to = brand)
+
+result <- rbind(brand_by_others, brand_result) %>% arrange(id)
+
+
+write.table(result$brand, "Results/brand.txt", row.names=F, sep="\n", quote = F)
 
