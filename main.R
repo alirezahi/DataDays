@@ -4,6 +4,7 @@ library(tidytext)
 library(RecordLinkage)
 library(tidyr)
 library(plyr)
+library(stringr)
 
 title_prob_precision <- 0.8
 all_token_prob_precision <- 0.5
@@ -11,6 +12,8 @@ all_token_prob_precision <- 0.5
 setwd("~/Documents/datadays/")
 td = read.csv("Data/sample_mobile_data_1000.csv", stringsAsFactors = F)
 td$id = 1:nrow(td)
+td$desc = chartr(old = "۱۲۳۴۵۶۷۸۹۰", new = "1234567890",td$desc)
+td$title = chartr(old = "۱۲۳۴۵۶۷۸۹۰", new = "1234567890",td$title)
 
 
 desc_token <- td %>% select(id, desc) %>% unnest_tokens(word, desc)
