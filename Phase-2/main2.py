@@ -1,3 +1,4 @@
+import sys
 import pandas as pd
 from sklearn.externals import joblib
 from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer, TfidfVectorizer
@@ -9,23 +10,28 @@ from sklearn.linear_model import SGDClassifier
 from sklearn.pipeline import Pipeline
 import numpy as np
 from joblib import dump, load
-from utils import load_data, CombinedAttr, SELECTED_FEATURES, DATA_PATH, TEST_DATA_PATH, TARGET_FIELDS
+from utils import load_data, CombinedAttr, SELECTED_FEATURES
 
 pipe = Pipeline([
     ('attribute_adder', CombinedAttr()),
     ('tfidf', TfidfVectorizer()),
     ])
 
+TARGET_FIELDS = [str(sys.argv[1])]
+DATA_PATH = str(sys.argv[2])
+
 posts = load_data(DATA_PATH, SELECTED_FEATURES+TARGET_FIELDS)
+posts[TARGET_FIELDS[0]].fillna('', inplace=True)
+# posts['cat3'].fillna('&', inplace=True)
 
 posts_prepared = pipe.fit_transform(posts)
 
 oe = OrdinalEncoder()
-cat_encoded = oe.fit_transform(posts[['cat1']])
+cat_encoded = oe.fit_transform(posts[TARGET_FIELDS])
 
 SVG_model = SGDClassifier(random_state=42)
 SVG_model.fit(posts_prepared, cat_encoded)
 
-dump(pipe, 'pipe.joblib') 
-dump(oe, 'oe.joblib') 
-dump(SVG_model, 'svg.joblib')
+dump(pipe, 'pipe'+TARGET_FIELDS[0]+'.joblib') 
+dump(oe, 'oe'+TARGET_FIELDS[0]+'.joblib') 
+dump(SVG_model, 'svm'+TARGET_FIELDS[0]+'.joblib')
