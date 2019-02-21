@@ -10,13 +10,14 @@ from sklearn.linear_model import SGDClassifier
 from sklearn.pipeline import Pipeline
 import numpy as np
 from joblib import dump, load
-from utils import load_data, CombinedAttr, SELECTED_FEATURES, DATA_PATH, TEST_DATA_PATH, save_file
+from utils import load_data, CombinedAttr, SELECTED_FEATURES, save_file
 
 TARGET = str(sys.argv[1])
+TEST_DATA_PATH = str(sys.argv[2])
 
-pipe = load('pipe.joblib') 
-oe = load('oe.joblib') 
-SVG_model = load('svg.joblib') 
+pipe = load('pipe'+TARGET+'.joblib') 
+oe = load('oe'+TARGET+'.joblib') 
+SVG_model = load('svm'+TARGET+'.joblib') 
 
 test_posts = load_data(TEST_DATA_PATH, SELECTED_FEATURES)
 
