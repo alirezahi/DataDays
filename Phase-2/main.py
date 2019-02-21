@@ -1,6 +1,6 @@
 import pandas as pd
 from sklearn.externals import joblib
-from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
+from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer, TfidfVectorizer
 from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.preprocessing import OrdinalEncoder
 from sklearn.model_selection import train_test_split, cross_val_score
@@ -26,7 +26,7 @@ def load_data(file_path, selected_features):
 def create_pipeline():
     return Pipeline([
     ('attribute_adder', CombinedAttr()),
-    ('vect',CountVectorizer(max_features=20000)),
+    ('tfidf', TfidfVectorizer(ngram_range=(1,2), max_features=20000)),
 ])
 
 def preprocess_data(datas):
@@ -65,7 +65,7 @@ cat_encoded = oe.fit_transform(posts_cat1)
 
 
 # train_set, test_set = train_test_split(posts_prepared, test_size=0.2, random_state=42)
-SVG_model = SGDClassifier(loss='hinge', penalty='l1', alpha=1e-5, random_state=42, max_iter=5, tol=None)
+SVG_model = SGDClassifier(random_state=42)
 # scores = cross_val_score(SVG_model, posts_prepared, cat_encoded, cv=5)
 SVG_model.fit(posts_prepared, cat_encoded)
 joblib.dump(SVG_model, 'model.txt')
@@ -74,9 +74,10 @@ test_posts = load_data(TEST_DATA_PATH, SELECTED_FEATURES)
 
 # PREPROCESS
 
-posts_prepared = preprocess_data(test_posts)
+test_posts_prepared = preprocess_data(test_posts)
 
-predicted = SVG_model.predict(posts_prepared)
+predicted = SVG_model.predict(test_posts_prepared)
+for item in list(oe.inverse_transform([[i] for i in predicted]))[:20]: print(item)
 import pdb;pdb.set_trace();
 
 
