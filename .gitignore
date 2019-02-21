@@ -5,3 +5,4 @@ Data/*
 ./Phase-2/cat*prediction.csv
 ./Phase-2/result.csv
 *.joblib
+*/*code.zip
