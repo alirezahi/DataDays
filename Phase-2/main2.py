@@ -11,14 +11,21 @@ import numpy as np
 from joblib import dump, load
 from utils import load_data, CombinedAttr, SELECTED_FEATURES, DATA_PATH, TEST_DATA_PATH, TARGET_FIELDS
 
-pipe = load('pipe.joblib') 
-oe = load('oe.joblib') 
-SVG_model = load('svg.joblib') 
+pipe = Pipeline([
+    ('attribute_adder', CombinedAttr()),
+    ('tfidf', TfidfVectorizer()),
+    ])
 
-test_posts = load_data(TEST_DATA_PATH, SELECTED_FEATURES)
+posts = load_data(DATA_PATH, SELECTED_FEATURES+TARGET_FIELDS)
 
-test_posts_prepared = pipe.transform(test_posts)
-predicted = SVG_model.predict(test_posts_prepared)
+posts_prepared = pipe.fit_transform(posts)
 
+oe = OrdinalEncoder()
+cat_encoded = oe.fit_transform(posts[['cat1']])
 
-for item in list(oe.inverse_transform([[i] for i in predicted]))[:20]: print(item)
+SVG_model = SGDClassifier(random_state=42)
+SVG_model.fit(posts_prepared, cat_encoded)
+
+dump(pipe, 'pipe.joblib') 
+dump(oe, 'oe.joblib') 
+dump(SVG_model, 'svg.joblib')
