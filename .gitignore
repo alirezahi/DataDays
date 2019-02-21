@@ -3,3 +3,4 @@ Data/*
 .RData
 .Rhistory
 ./Phase-2/cat*prediction.csv
+./Phase-2/result.csv
