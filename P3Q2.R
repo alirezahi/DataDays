@@ -13,6 +13,12 @@ td <- read.csv("Data/divar_posts_dataset.csv", stringsAsFactors = F, nrows = 300
 
 desc_text <- td %>% select(X,desc)
 
+ token_distribution <- desc_text %>%
+   unnest_tokens(word, desc) %>%
+   group_by(word) %>%
+   summarise(count = n()) %>%
+   arrange(X,desc(count))
+
 # token_distribution <- desc_text %>%
 #   unnest_tokens(word, desc) %>%
 #   group_by(X, word) %>%
