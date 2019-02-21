@@ -14,8 +14,6 @@ from joblib import dump, load
 SELECTED_FEATURES = ['title','price','desc','id']
 DATA_PATH = '../Data/divar_posts_dataset.csv'
 TEST_DATA_PATH = '../Data/phase_2_dataset.csv'
-# TARGET_FIELDS = ['cat1','cat2','cat3']
-TARGET_FIELDS = ['cat1']
 
 
 def load_data(file_path, selected_features):
@@ -24,12 +22,26 @@ def load_data(file_path, selected_features):
     return df[selected_features]
 
 
+def save_file(data,file_name,column_name='column'):
+    df = pd.DataFrame({
+        column_name: data
+    })
+    df.to_csv(file_name)
+
+def concat_file():
+    list_ = []
+
+    for file_ in allFiles:
+        df = pd.read_csv(file_,index_col=None, header=0)
+        list_.append(df)
+
+
 class CombinedAttr(BaseEstimator, TransformerMixin):
     def fit(self, X, y=None):
         return self
 
     def transform(self, X, y=None):
-        X_df = pd.DataFrame(X, columns=SELECTED_FEATURES+TARGET_FIELDS)
+        X_df = pd.DataFrame(X, columns=SELECTED_FEATURES)
         X_df['text'] = X_df['title'] + ' '  +X_df['desc']
         X_df = X_df[['text']]
         return np.asarray(X_df['text']).astype(str)

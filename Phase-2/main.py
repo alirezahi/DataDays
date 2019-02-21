@@ -47,7 +47,7 @@ posts_prepared = data_pipelined.fit_transform(posts)
 joblib.dump(data_pipelined, 'pipeline.txt')
 
 
-posts_cat1 = posts[['cat1']]
+posts_cat1 = posts[['cat2']]
 oe = OrdinalEncoder()
 cat_encoded = oe.fit_transform(posts_cat1)
 joblib.dump(data_pipelined, 'oe.txt')
