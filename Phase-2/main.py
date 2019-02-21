@@ -1,6 +1,6 @@
 import pandas as pd
 from sklearn.externals import joblib
-from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer, TfidfVectorizer
+from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
 from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.preprocessing import OrdinalEncoder
 from sklearn.model_selection import train_test_split, cross_val_score
@@ -26,14 +26,8 @@ def load_data(file_path, selected_features):
 def create_pipeline():
     return Pipeline([
     ('attribute_adder', CombinedAttr()),
-    ('tfidf', TfidfVectorizer(ngram_range=(1,2), max_features=20000)),
+    ('tfidf', TfidfVectorizer()),
 ])
-
-def preprocess_data(datas):
-    data_pipelined = create_pipeline()
-    return data_pipelined.fit_transform(datas)
-
-
 
 class CombinedAttr(BaseEstimator, TransformerMixin):
     def fit(self, X, y=None):
@@ -45,43 +39,30 @@ class CombinedAttr(BaseEstimator, TransformerMixin):
         X_df = X_df[['text']]
         return np.asarray(X_df['text']).astype(str)
 
-# LOAD DATA
 
+data_pipelined = create_pipeline()
 
 posts = load_data(DATA_PATH, SELECTED_FEATURES+TARGET_FIELDS)
+posts_prepared = data_pipelined.fit_transform(posts)
+joblib.dump(data_pipelined, 'pipeline.txt')
 
-# PREPROCESS
-
-posts_prepared = preprocess_data(posts)
 
 posts_cat1 = posts[['cat1']]
+oe = OrdinalEncoder()
+cat_encoded = oe.fit_transform(posts_cat1)
+joblib.dump(data_pipelined, 'oe.txt')
+
+import pdb;pdb.set_trace()
+gg = pd.DataFrame(list(posts_prepared))
+
+model = SGDClassifier(random_state=42)
+model.fit(posts_prepared, cat_encoded)
+joblib.dump(model, 'model.txt')
+
+scores = cross_val_score(model, posts_prepared, cat_encoded, cv=5)
 
 # cat_encoder = OneHotEncoder(sparse=False)
 # posts_cat1_1hot = cat_encoder.fit_transform(posts_cat1)
-
-oe = OrdinalEncoder()
-cat_encoded = oe.fit_transform(posts_cat1)
-
-
-
 # train_set, test_set = train_test_split(posts_prepared, test_size=0.2, random_state=42)
-SVG_model = SGDClassifier(random_state=42)
-# scores = cross_val_score(SVG_model, posts_prepared, cat_encoded, cv=5)
-SVG_model.fit(posts_prepared, cat_encoded)
-joblib.dump(SVG_model, 'model.txt')
 
-test_posts = load_data(TEST_DATA_PATH, SELECTED_FEATURES)
-
-# PREPROCESS
-
-test_posts_prepared = preprocess_data(test_posts)
-
-predicted = SVG_model.predict(test_posts_prepared)
-for item in list(oe.inverse_transform([[i] for i in predicted]))[:20]: print(item)
 import pdb;pdb.set_trace();
-
-
-
-
-# model = create_model()
-# model.fit()
