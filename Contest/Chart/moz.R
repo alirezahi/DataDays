@@ -102,6 +102,10 @@ plot_dis_city_cat("leisure-hobbies")
 
 unique(td$cat1)
 
+# task4
+
+
+
 
 
 
