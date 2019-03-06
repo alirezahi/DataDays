@@ -45,3 +45,4 @@ class CombinedAttr(BaseEstimator, TransformerMixin):
         X_df['text'] = X_df['title'] + ' '  +X_df['desc']
         X_df = X_df[['text']]
         return np.asarray(X_df['text']).astype(str)
+
