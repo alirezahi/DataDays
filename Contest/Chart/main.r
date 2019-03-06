@@ -16,7 +16,13 @@ td$archive_by_user <- as.boolean(td$archive_by_user)
 
 # td_filtered <- filter(td, archive_by_user == TRUE)
 
-new_td <- td %>% mutate(hour = str_extract(created_at, ","))
+new_td <- td %>%  mutate(hour = unlist(strsplit(created_at, " "))[rep(c(F,T), nrow(td))])
+
+new_td <- new_td %>%
+  group_by(city, hour) %>%
+  summarise(count = n()) %>%
+  arrange(city, desc(count)) %>%
+  top_n(1)
 
 which.max(x) %>% as.matrix() %>% rownames()
 
