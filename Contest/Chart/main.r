@@ -16,6 +16,8 @@ td$archive_by_user <- as.boolean(td$archive_by_user)
 
 # td_filtered <- filter(td, archive_by_user == TRUE)
 
+## map question 
+
 new_td <- td %>%  mutate(hour = unlist(strsplit(created_at, " "))[rep(c(F,T), nrow(td))])
 
 new_td <- new_td %>%
@@ -24,12 +26,33 @@ new_td <- new_td %>%
   arrange(city, desc(count)) %>%
   top_n(1)
 
+new_td$count <- as.factor(new_td$count)
+
+ggplot(new_td, aes(city, hour, color = count)) + geom_point()
+
+## end map question
+
+
+
+# outlier
+
+
+new_td <- td %>%
+  filter(cat1 == 'vehicles' & price != -1)
+
+
+ggplot(new_td, aes(x=cat1, y=price)) + 
+  geom_boxplot(outlier.colour="red", outlier.shape=8,
+               outlier.size=4)+ geom_dotplot(binaxis='y', stackdir='center', dotsize=0.3, color="red")
+
+# end outlier
+
 which.max(x) %>% as.matrix() %>% rownames()
 
 td_city <- filter(td)
 
 result_city <- td %>%
-  group_by(city) %>%
+  group_by(city)
   
 result_city <- summerise(mode= which.max(table()))
 result_city_count <- td %>%
