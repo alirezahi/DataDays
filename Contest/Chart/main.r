@@ -9,7 +9,7 @@ library(stringr)
 rm(list=ls())
 
 setwd("~/Documents/datadays/")
-td <- read.csv("Data/cafe_baazaar_dataset.csv", stringsAsFactors = F, nrow=3000)
+td <- read.csv("Data/cafe_baazaar_dataset.csv", stringsAsFactors = F)
 td$archive_by_user <- as.boolean(td$archive_by_user)
 
 # td_filtered <- filter(td, cat1 == "personal")
@@ -43,23 +43,22 @@ new_td <- td %>%
 
 ggplot(new_td, aes(x=cat1, y=price)) + 
   geom_boxplot(outlier.colour="red", outlier.shape=8,
-               outlier.size=4)+ geom_dotplot(binaxis='y', stackdir='center', dotsize=0.3, color="red")
+               outlier.size=4)
 
 # end outlier
 
-which.max(x) %>% as.matrix() %>% rownames()
 
 td_city <- filter(td)
 
 result_city <- td %>%
   group_by(city)
   
-result_city <- summerise(mode= which.max(table()))
+result_city <- summarise(mode= which.max(table()))
 result_city_count <- td %>%
   group_by(city) %>%
   summarise(count = n())
 
-result <- td_filtered %>%
+result <- td %>%
   group_by(city) %>%
   summarise(count = n())
 
