@@ -74,3 +74,35 @@ plot_dis_cat_city("Kermanshah")
 unique(td$city)
 
 
+### map
+
+
+#task1
+
+td_archived <- filter(td, archive_by_user == T)
+
+td_city_archived <- td_archived %>%
+  group_by(city) %>% summarise(count = n())
+
+ggplot(td_city_archived, aes(city, count, fill=city)) + geom_bar(stat = "identity")
+
+
+#task3
+
+plot_dis_city_cat <- function(cat_name) {
+  td_specific_cat <- td %>% filter(cat1 == cat_name) %>% group_by(city) %>% summarise(count = n())
+  ggplot(td_specific_cat, aes(city, count, fill = city)) + geom_bar(stat = "identity") + ggtitle(cat_name)
+}
+plot_dis_city_cat("for-the-home")
+plot_dis_city_cat("vehicles")
+plot_dis_city_cat("personal")
+plot_dis_city_cat("electronic-devices")
+plot_dis_city_cat("businesses")
+plot_dis_city_cat("leisure-hobbies")
+
+unique(td$cat1)
+
+
+
+
+
