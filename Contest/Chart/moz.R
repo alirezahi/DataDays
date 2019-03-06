@@ -9,7 +9,7 @@ library(stringr)
 rm(list=ls())
 
 setwd("~/Documents/datadays/")
-td <- read.csv("Data/cafe_baazaar_dataset.csv", stringsAsFactors = F, nrow=3000)
+td <- read.csv("Data/cafe_baazaar_dataset.csv", stringsAsFactors = F)
 td$archive_by_user <- as.boolean(td$archive_by_user)
 td <- td %>% mutate(hour = unlist(strsplit(created_at, " "))[rep(c(F,T), nrow(td))])
 td <- td %>% mutate(day = unlist(strsplit(created_at, " "))[rep(c(T,F), nrow(td))])
@@ -42,12 +42,35 @@ ggplot(td_city, aes(city, per, fill = city)) + geom_bar(stat="identity")
 
 ### double
 
+## task 1
 
-plot_dis_day_city <- function(cat_name) {
+plot_dis_day_cat <- function(cat_name) {
   td_specific_cat <- td %>% filter(cat1 == cat_name) %>% group_by(day) %>% summarise(count = n())
-  ggplot(td_specific_cat, aes(day, count, fill = day)) + geom_bar(stat = "identity")
+  ggplot(td_specific_cat, aes(day, count, fill = day)) + geom_bar(stat = "identity") + ggtitle(cat_name)
 }
-plot_dis_day_city("personal")
+plot_dis_day_cat("leisure-hobbies")
 
+unique(td$cat1)
+
+
+## task 2
+
+plot_dis_cat_city <- function(city_name) {
+  td_specific_city <- td %>% filter(city == city_name) %>% group_by(cat1) %>% summarise(count = n())
+  ggplot(td_specific_city, aes(cat1, count, fill = cat1)) + geom_bar(stat = "identity") + ggtitle(city_name)
+}
+
+plot_dis_cat_city("Tehran")
+plot_dis_cat_city("Mashhad")
+plot_dis_cat_city("Karaj")
+plot_dis_cat_city("Qom")
+plot_dis_cat_city("Isfahan")
+plot_dis_cat_city("Shiraz")
+plot_dis_cat_city("Tabriz")
+plot_dis_cat_city("Ahvaz")
+plot_dis_cat_city("Kermanshah")
+
+
+unique(td$city)
 
 
